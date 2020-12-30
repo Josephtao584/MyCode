@@ -40,7 +40,7 @@ void bfs_1(){
         for(int i = h[t]; i != -1; i = ne[i]){
             int j = e[i];
             if(!d[j]){
-                d[j] = d[] + 1;
+                d[j] = d[t] + 1;
                 q[++tt] = j;
             }
         }
