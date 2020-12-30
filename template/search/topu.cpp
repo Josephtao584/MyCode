@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const int N = 100010, M = 100010;
+const int N = 100010, M = 100010;       //topSort 考虑入度
 
 int n, m;
 int h[N], e[M], ne[M], idx;
