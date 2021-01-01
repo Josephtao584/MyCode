@@ -15,8 +15,7 @@ const int N = 100050, M = 100050;
 int n, m;
 int h[N], e[M], w[M], ne[M], idx;
 bool st[N];
-int q[N];
-int dist[N];
+int dist[N], cnt[N];
 
 void add(int a, int b, int c){
     e[idx] = b, w[idx] = c, ne[idx] = h[a], h[a] = idx++;
@@ -24,27 +23,31 @@ void add(int a, int b, int c){
 
 int spfa(){
     memset(dist, 0x3f, sizeof dist);
-    int hh = 0, tt = -1;
-    dist[1] = 0;
-    q[++tt] = 1;
-    st[1] = true;
-    while (hh <= tt){
-        int t = q[hh++];
+    queue<int> q;
+    for(int i = 1; i <= n; i++){
+        q.push(i);
+        st[i] = true;
+    }
+    while (q.size()){
+        int t = q.front();
+        q.pop();
         st[t] = false;
         for(int i = h[t]; i != -1; i = ne[i]){
             int j = e[i];
             if(dist[j] > dist[t] + w[i]){
                 dist[j] = dist[t] + w[i];
+                cnt[j] = cnt[t] + 1;
+                if(cnt[j] >= n)
+                    return -1;
                 if(!st[j]){
                     st[j] = true;
-                    q[++tt] = j;
+                    q.push(j);
                 }
             }
         }
 
     }
-    if(dist[n] == 0x3f3f3f3f) return -1;
-    return dist[n];
+    return 1;
 }
 
 int main(){
@@ -56,8 +59,8 @@ int main(){
         add(a, b, c);
     }
     int t = spfa();
-    if(t == -1) puts("impossible");
-    else cout << t << endl;
+    if(t == -1) puts("Yes");
+    else cout << "No" << endl;
 }
 
 

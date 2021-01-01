@@ -1,63 +1,56 @@
-//
-// Created by 陶文鹏 on 2020/12/31.
-//
-
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <algorithm>
-#include <cstring>
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+#include<queue>
 
 using namespace std;
-
-const int N = 100050, M = 100050;
-
+const int N = 1e5 + 10;
+int h[N], e[N], w[N], ne[N], idx;
 int n, m;
-int h[N], e[M], w[M], ne[M], idx;
-bool st[N];
-int q[N];
-int dist[N];
+queue<int> q;
+int st[N], dist[N], cnt[N];
 
-void add(int a, int b, int c){
+void add(int a, int b, int c) {
     e[idx] = b, w[idx] = c, ne[idx] = h[a], h[a] = idx++;
 }
 
-int spfa(){
+int spfa() {
     memset(dist, 0x3f, sizeof dist);
-    int hh = 0, tt = -1;
-    dist[1] = 0;
-    q[++tt] = 1;
+    for (int i = 1; i <= n; i++) {
+        q.push(i);
+        st[i] = true;
+    }
     st[1] = true;
-    while (hh <= tt){
-        int t = q[hh++];
+    while (q.size()) {
+        int t = q.front();
+        q.pop();
         st[t] = false;
-        for(int i = h[t]; i != -1; i = ne[i]){
+        for (int i = h[t]; i != -1; i = ne[i]) {
             int j = e[i];
-            if(dist[j] > dist[t] + w[i]){
+            if (dist[j] > dist[t] + w[i]) {
                 dist[j] = dist[t] + w[i];
-                if(!st[j]){
+                cnt[j] = cnt[t] + 1;
+                // 如果超过了n-1 
+                // 根据抽屉原理，说明经过某个节点两次，则说明有环
+                if (cnt[j] >= n) return true;
+                if (!st[j]) {
                     st[j] = true;
-                    q[++tt] = j;
+                    q.push(j);
                 }
             }
         }
-
     }
-    if(dist[n] == 0x3f3f3f3f) return -1;
-    return dist[n];
+    return false;
 }
 
-int main(){
-    cin >> n >> m;
+int main() {
     memset(h, -1, sizeof h);
-    for(int i = 0; i < m; i++){
+    cin >> n >> m;
+    for (int i = 0; i < m; i++) {
         int a, b, c;
-        cin >> a >> b >> c;
+        scanf("%d%d%d", &a, &b, &c);
         add(a, b, c);
     }
-    int t = spfa();
-    if(t == -1) puts("impossible");
-    else cout << t << endl;
+    if (spfa()) puts("Yes");
+    else puts("No");
 }
-
-
