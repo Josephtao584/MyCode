@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const int N = 510, M = 100010;
+const int N = 510, M = 200010;
 
 int n, m;
 int h[N], e[M], ne[M], w[M], idx;
@@ -31,7 +31,6 @@ int prim(){
         }
         if(dist[t] == 0x3f3f3f3f) return -1;
         res += dist[t];
-        cout << dist[t] << endl;
         st[t] = true;
         for(int j = h[t]; j != -1; j = ne[j]){
             int k = e[j];
@@ -52,7 +51,7 @@ int main(){
         add(b, a, c);
     }
     int t = prim();
-    if(!t) puts("impossible");
+    if(t == -1) puts("impossible");
     else cout << t << endl;
     return 0;
 }
