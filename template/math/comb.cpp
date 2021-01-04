@@ -10,11 +10,10 @@ int c[N][N];
 
 int main(){
     cin >> n;
-    for(int i = 1; i <= 2010; i++)
+    for(int i = 0; i <= 2000; i++)
         for(int j = 0; j <= i; j++){
-            if(j == 0)
-                c[i][j] = 1;
-            c[i][j] = (c[i - 1][j - 1] + c[i][j - 1]) % mod;
+            if(j == 0) c[i][j] = 1;
+            else c[i][j] = (c[i - 1][j - 1] + c[i - 1][j]) % mod;
         }
 
     for(int i = 0; i < n; i++){
