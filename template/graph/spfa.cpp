@@ -1,3 +1,4 @@
+//spfa求最短路（可以有负边）
 #include<iostream>
 #include<cstring>
 #include<algorithm>

@@ -1,5 +1,5 @@
 //
-// Created by 陶文鹏 on 2020/12/31.
+// Prim求最小生成数
 //
 
 #include <iostream>

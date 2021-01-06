@@ -1,26 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
 
 using namespace std;
 
-const int N = 2010;
-const int mod = 1e9 + 7;
+const int N = 30;
 
-int n;
-int c[N][N];
+double g[N][N];
 
-int main(){
-    cin >> n;
-    for(int i = 1; i <= 2010; i++)
-        for(int j = 0; j <= i; j++){
-            if(j == 0)
-                c[i][j] = 1;
-            c[i][j] = (c[i - 1][j - 1] + c[i][j - 1]) % mod;
+class Solution {
+public:
+    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
+        unordered_map<string, int> map;
+        memset(g, 0, sizeof g);
+        int index = 0;
+        for(int i = 0; i < equations.size(); i++) g[i][i] = 0;
+        for(int i = 0; i < equations.size(); i++){
+            string a = equations[i][0];
+            string b = equations[i][1];
+            if(!map.count(a)) map[a] = index++;
+            if(!map.count(b)) map[b] = index++;
+            int m_a = map[a], m_b = map[b];
+            g[m_a][m_b] = values[i];
+            g[m_b][m_a] = 1.0 / values[i];
         }
 
-    for(int i = 0; i < n; i++){
-        int a, b;
-        cin >> a >> b;
-        cout << c[a][b] << endl;
-    }
+        for(int k = 0; k < index; k++)
+            for(int i = 0; i < index; i++)
+                for(int j = 0; j < index; j++)
+                    if(g[i][j] == 0)
+                        g[i][j] = g[i][k] * g[k][j];
 
-    return 0;
-}
+        vector<double> res;
+        for(int i = 0; i < queries.size(); i++){
+            string a = queries[i][0];
+            string b = queries[i][1];
+            if(!map.count(a) || !map.count(b)) {
+                res.push_back(-1);
+            }else{
+                int m_a = map[a], m_b = map[b];
+                res.push_back(g[m_a][m_b]);
+            }
+        }
+        return res;
+    }
+};
